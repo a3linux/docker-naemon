@@ -1,8 +1,7 @@
-FROM phusion/baseimage:0.9.21
-MAINTAINER Terence Kent <tkent@xetus.com>
+FROM phusion/baseimage:master
 
 #
-# Install the baseline packages for this image. Note, these 
+# Install the baseline packages for this image. Note, these
 # packages are not version controlled and may change between
 # builds.
 #
@@ -26,17 +25,19 @@ RUN apt-get update && \
     libcrypt-ssleay-perl
 
 #
-# Instal the GPG key for the labs.consol.de repository and install 
+# Instal the GPG key for the labs.consol.de repository and install
 # the repository
 #
 RUN gpg --keyserver keys.gnupg.net --recv-keys F8C1CA08A57B9ED7 &&\
   gpg --armor --export F8C1CA08A57B9ED7 | apt-key add - &&\
-  echo 'deb http://labs.consol.de/repo/stable/ubuntu xenial main' \
+  echo 'deb http://labs.consol.de/repo/stable/ubuntu bionic main' \
   > /etc/apt/sources.list.d/consol.stable.list &&\
   apt-get update &&\
   DEBIAN_FRONTEND=noninteractive apt-get install -y \
     nagios-nrpe-plugin\
-    naemon=1.0.6
+    naemon-livestatus\
+    naemon-thruk\
+    naemon
 
 ############################################################
 # If modifying this build script, add cutom packages here! #
